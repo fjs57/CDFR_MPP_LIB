@@ -10,6 +10,12 @@
 
 #include "main.h"
 #include <stdbool.h>
+#include "MPP_CFG.h"
+
+#include "step_generator.h"
+#ifdef MPP_CFG_USE_TMC
+#include "TMC2209_UART.h"
+#endif
 
 typedef struct
 {
@@ -23,8 +29,9 @@ typedef struct
 
 	GPIO_TypeDef *en_port;
 	uint32_t en_pin;
-
+#ifdef MPP_CFG_USE_TMC
 	UART_HandleTypeDef *huart;
+#endif
 }
 M_MPP_Descriptor_t;
 
@@ -47,6 +54,13 @@ typedef struct
 {
 	uint32_t last_enable_watchdog_ping;
 	bool enable_state;
+
+	STEP_GEN_Descriptor_t sg_desc;
+	STEP_GEN_Instance_t sg_inst;
+#ifdef MPP_CFG_USE_TMC
+	TMC2209_UART_Descriptor_t tmc_desc;
+	TMC2209_UART_Instance_t tmc_inst;
+#endif
 }
 M_MPP_Data_t;
 
@@ -61,6 +75,7 @@ M_MPP_Instance_t;
 void MPP_Init(M_MPP_Instance_t *instance);
 
 void MPP_Process(M_MPP_Instance_t *instance);
+void MPP_kHz_Process(M_MPP_Instance_t *instance);
 
 bool MPP_OnPwmPulseFinishedProcess(M_MPP_Instance_t *instance, TIM_HandleTypeDef *htim);
 
@@ -81,10 +96,10 @@ float MPP_GetCurrentSpeed(M_MPP_Instance_t *instance);
 void MPP_SetCurrentPosition(M_MPP_Instance_t *instance, double new_position);
 double MPP_GetCurrentPosition(M_MPP_Instance_t *instance);
 
-void MPP_SetStepPerRevolution(M_MPP_Instance_t *instance, uint32_t new_spr);
+bool MPP_SetStepPerRevolution(M_MPP_Instance_t *instance, uint32_t new_spr);
 uint32_t MPP_GetStepPerRevolution(M_MPP_Instance_t *instance);
 
-void MPP_SetMicrosteps(M_MPP_Instance_t *instance, uint32_t new_ustep);
+bool MPP_SetMicrosteps(M_MPP_Instance_t *instance, uint32_t new_ustep);
 uint32_t MPP_GetMicrosteps(M_MPP_Instance_t *instance);
 
 void MPP_SetAcceleration(M_MPP_Instance_t *instance, float new_acc);

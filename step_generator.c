@@ -188,14 +188,15 @@ void STEP_GEN_Process(STEP_GEN_Instance_t *instance)
 /**
  * shall be called in the HAL_TIM_PWM_PulseFinishedCallback implementation
  */
-void STEP_GEN_OnStepProcess(STEP_GEN_Instance_t *instance, TIM_HandleTypeDef *htim)
+bool STEP_GEN_OnStepProcess(STEP_GEN_Instance_t *instance, TIM_HandleTypeDef *htim)
 {
 	if (htim != STEP_GEN_DESCRIPTOR->htim)
 	{
-		return;
+		return 0;
 	}
 	STEP_GEN_CountSteps(instance);
 	STEP_GEN_GPIO_SetDir(instance);
+	return 1;
 }
 
 void STEP_GEN_SetTargetSpeed				(STEP_GEN_Instance_t *instance, int32_t 	new_target_speed		){ STEP_GEN_DATA.target_speed = new_target_speed; }

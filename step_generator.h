@@ -9,6 +9,7 @@
 #define STEP_GEN_H_
 
 #include "main.h"
+#include <stdbool.h>
 
 typedef struct
 {
@@ -49,7 +50,7 @@ STEP_GEN_Instance_t;
 
 void STEP_GEN_Init(STEP_GEN_Instance_t *instance);
 void STEP_GEN_Process(STEP_GEN_Instance_t *instance);
-void STEP_GEN_OnStepProcess(STEP_GEN_Instance_t *instance, TIM_HandleTypeDef *htim);
+bool STEP_GEN_OnStepProcess(STEP_GEN_Instance_t *instance, TIM_HandleTypeDef *htim);
 
 void STEP_GEN_SetTargetSpeed			(STEP_GEN_Instance_t *instance, int32_t 	new_target_speed		);
 void STEP_GEN_SetCurrentPosition		(STEP_GEN_Instance_t *instance, int64_t 	new_current_position	);

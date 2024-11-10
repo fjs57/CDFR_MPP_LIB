@@ -9,6 +9,7 @@
 #define L_MPP_TMC2209_UART_H_
 
 #include "main.h"
+#include <stdbool.h>
 
 typedef struct
 {
