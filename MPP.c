@@ -31,6 +31,7 @@ static int64_t MPP_RadToSteps(M_MPP_Instance_t *instance, double rad);
 static double MPP_StepsToRad(M_MPP_Instance_t *instance, int64_t steps);
 static void MPP_UpdateStepGenAcc(M_MPP_Instance_t *instance);
 static void MPP_WatchdogProcess(M_MPP_Instance_t *instance);
+static void MPP_WriteEnablePin(M_MPP_Instance_t *instance);
 
 
 static bool MPP_ComputeEnableState(M_MPP_Instance_t *instance)
@@ -97,6 +98,11 @@ static void MPP_WatchdogProcess(M_MPP_Instance_t *instance)
 	MPP_DATA.enable_state = MPP_ComputeEnableState(instance);
 }
 
+static void MPP_WriteEnablePin(M_MPP_Instance_t *instance)
+{
+	HAL_GPIO_WritePin(MPP_DESC->en_port, MPP_DESC->en_pin, !MPP_DATA.enable_state);
+}
+
 
 void MPP_Init(M_MPP_Instance_t *instance)
 {
@@ -136,6 +142,7 @@ void MPP_Init(M_MPP_Instance_t *instance)
 void MPP_Process(M_MPP_Instance_t *instance)
 {
 	MPP_WatchdogProcess(instance);
+	MPP_WriteEnablePin(instance);
 #ifdef MPP_CFG_USE_TMC
 	TMC2209_UART_Process(MPP_TMC_PTR);
 #endif
