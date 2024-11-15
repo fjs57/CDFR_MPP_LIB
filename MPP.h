@@ -1,12 +1,12 @@
 /*
- * M_MPP.h
+ * MPP.h
  *
  *  Created on: Nov 3, 2024
  *      Author: franc
  */
 
-#ifndef L_MPP_M_MPP_H_
-#define L_MPP_M_MPP_H_
+#ifndef L_MPP_MPP_H_
+#define L_MPP_MPP_H_
 
 #include "main.h"
 #include <stdbool.h>
@@ -16,6 +16,8 @@
 #ifdef MPP_CFG_USE_TMC
 #include "TMC2209_UART.h"
 #endif
+
+#define MPP_2PI 6.283185307179586
 
 typedef struct
 {
@@ -33,11 +35,13 @@ typedef struct
 	UART_HandleTypeDef *huart;
 #endif
 }
-M_MPP_Descriptor_t;
+MPP_Descriptor_t;
 
 typedef struct
 {
+#ifdef MPP_CFG_USE_TMC
 	uint8_t node_addr;
+#endif
 
 	uint32_t steps_per_rev;
 	uint32_t microsteps_count;
@@ -48,7 +52,7 @@ typedef struct
 	float acceleration; // in rad/s²
 	uint32_t speed_update_period; // in ms
 }
-M_MPP_Config_t;
+MPP_Config_t;
 
 typedef struct
 {
@@ -62,50 +66,50 @@ typedef struct
 	TMC2209_UART_Instance_t tmc_inst;
 #endif
 }
-M_MPP_Data_t;
+MPP_Data_t;
 
 typedef struct
 {
-	M_MPP_Descriptor_t *descriptor;
-	M_MPP_Config_t config;
-	M_MPP_Data_t data;
+	MPP_Descriptor_t *descriptor;
+	MPP_Config_t config;
+	MPP_Data_t data;
 }
-M_MPP_Instance_t;
+MPP_Instance_t;
 
-void MPP_Init(M_MPP_Instance_t *instance);
+void MPP_Init(MPP_Instance_t *instance);
 
-void MPP_Process(M_MPP_Instance_t *instance);
-void MPP_kHz_Process(M_MPP_Instance_t *instance);
+void MPP_Process(MPP_Instance_t *instance);
+void MPP_kHz_Process(MPP_Instance_t *instance);
 
-bool MPP_OnPwmPulseFinishedProcess(M_MPP_Instance_t *instance, TIM_HandleTypeDef *htim);
+bool MPP_OnPwmPulseFinishedProcess(MPP_Instance_t *instance, TIM_HandleTypeDef *htim);
 
-void MPP_Enable(M_MPP_Instance_t *instance);
-void MPP_Disable(M_MPP_Instance_t *instance);
-bool MPP_GetEnableState(M_MPP_Instance_t *instance);
+void MPP_Enable(MPP_Instance_t *instance);
+void MPP_Disable(MPP_Instance_t *instance);
+bool MPP_GetEnableState(MPP_Instance_t *instance);
 
-void MPP_EnableWatchdogActivate(M_MPP_Instance_t *instance);
-void MPP_EnableWatchdogDeactivate(M_MPP_Instance_t *instance);
-bool MPP_GetEnableWatchdogActivationState(M_MPP_Instance_t *instance);
+void MPP_EnableWatchdogActivate(MPP_Instance_t *instance);
+void MPP_EnableWatchdogDeactivate(MPP_Instance_t *instance);
+bool MPP_GetEnableWatchdogActivationState(MPP_Instance_t *instance);
 
-void MPP_SetTargetSpeed(M_MPP_Instance_t *instance, float new_speed);
-float MPP_GetTargetSpeed(M_MPP_Instance_t *instance);
+void MPP_SetTargetSpeed(MPP_Instance_t *instance, float new_speed);
+float MPP_GetTargetSpeed(MPP_Instance_t *instance);
 
-void MPP_SetCurrentSpeed(M_MPP_Instance_t *instance, float new_speed);
-float MPP_GetCurrentSpeed(M_MPP_Instance_t *instance);
+void MPP_SetCurrentSpeed(MPP_Instance_t *instance, float new_speed);
+float MPP_GetCurrentSpeed(MPP_Instance_t *instance);
 
-void MPP_SetCurrentPosition(M_MPP_Instance_t *instance, double new_position);
-double MPP_GetCurrentPosition(M_MPP_Instance_t *instance);
+void MPP_SetCurrentPosition(MPP_Instance_t *instance, double new_position);
+double MPP_GetCurrentPosition(MPP_Instance_t *instance);
 
-bool MPP_SetStepPerRevolution(M_MPP_Instance_t *instance, uint32_t new_spr);
-uint32_t MPP_GetStepPerRevolution(M_MPP_Instance_t *instance);
+bool MPP_SetStepPerRevolution(MPP_Instance_t *instance, uint32_t new_spr);
+uint32_t MPP_GetStepPerRevolution(MPP_Instance_t *instance);
 
-bool MPP_SetMicrosteps(M_MPP_Instance_t *instance, uint32_t new_ustep);
-uint32_t MPP_GetMicrosteps(M_MPP_Instance_t *instance);
+bool MPP_SetMicrosteps(MPP_Instance_t *instance, uint32_t new_ustep);
+uint32_t MPP_GetMicrosteps(MPP_Instance_t *instance);
 
-void MPP_SetAcceleration(M_MPP_Instance_t *instance, float new_acc);
-float MPP_GetAcceleration(M_MPP_Instance_t *instance);
+void MPP_SetAcceleration(MPP_Instance_t *instance, float new_acc);
+float MPP_GetAcceleration(MPP_Instance_t *instance);
 
-void MPP_SetSpeedUpdatePeriod(M_MPP_Instance_t *instance, uint32_t new_period);
-uint32_t MPP_GetSpeedUpdatePeriod(M_MPP_Instance_t *instance);
+void MPP_SetSpeedUpdatePeriod(MPP_Instance_t *instance, uint32_t new_period);
+uint32_t MPP_GetSpeedUpdatePeriod(MPP_Instance_t *instance);
 
-#endif /* L_MPP_M_MPP_H_ */
+#endif /* L_MPP_MPP_H_ */
