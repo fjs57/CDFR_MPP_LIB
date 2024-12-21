@@ -14,6 +14,7 @@
 #define MPP_SG_INST MPP_DATA.sg_inst
 #define MPP_SG_PTR &(MPP_SG_INST)
 #define MPP_SG_DESC MPP_DATA.sg_desc
+#define MPP_SG_CFG MPP_SG_INST.config
 
 #ifdef MPP_CFG_USE_TMC
 #define MPP_TMC_INST MPP_DATA.tmc_inst
@@ -106,8 +107,6 @@ static void MPP_WriteEnablePin(MPP_Instance_t *instance)
 
 void MPP_Init(MPP_Instance_t *instance)
 {
-	MPP_SG_INST.config.cycle_period = MPP_CFG_STEP_GEN_CYCLE_PERIOD;
-
 	MPP_SG_DESC.dir_pin = MPP_DESC->dir_pin;
 	MPP_SG_DESC.dir_port = MPP_DESC->dir_port;
 
@@ -129,6 +128,11 @@ void MPP_Init(MPP_Instance_t *instance)
 	MPP_DATA.enable_state = 0;
 	MPP_DATA.last_enable_watchdog_ping = 0;
 
+	MPP_SG_CFG.run_speed = MPP_RadPerSecToHz(instance, MPP_CFG.run_speed);
+	MPP_SG_CFG.approach_speed = MPP_RadPerSecToHz(instance, MPP_CFG.approach_speed);
+	MPP_SG_CFG.approach_distance = MPP_RadToSteps(instance, MPP_CFG.approach_distance);
+	MPP_SG_CFG.cycle_period = MPP_CFG_STEP_GEN_CYCLE_PERIOD;
+	MPP_SG_CFG.default_control_mode = (STEP_GEN_ControlMode_t)MPP_CFG.default_control_mode;
 	MPP_UpdateStepGenAcc(instance);
 
 	STEP_GEN_Init(MPP_SG_PTR);
@@ -156,6 +160,11 @@ void MPP_kHz_Process(MPP_Instance_t *instance)
 bool MPP_OnPwmPulseFinishedProcess(MPP_Instance_t *instance, TIM_HandleTypeDef *htim)
 {
 	return STEP_GEN_OnStepProcess(MPP_SG_PTR, htim);
+}
+
+void MPP_HardStop(MPP_Instance_t *instance)
+{
+	STEP_GEN_HardStop(MPP_SG_PTR);
 }
 
 void MPP_Enable(MPP_Instance_t *instance)
@@ -189,6 +198,15 @@ bool MPP_GetEnableWatchdogActivationState(MPP_Instance_t *instance)
 	return MPP_CFG.enable_watchdog_activation_state;
 }
 
+bool MPP_SetControlMode(MPP_Instance_t *instance, MPP_ControlMode_t new_mode)
+{
+	return STEP_GEN_SetControlMode(MPP_SG_PTR, new_mode);
+}
+
+MPP_ControlMode_t MPP_GetControlMode(MPP_Instance_t *instance)
+{
+	return STEP_GEN_GetControlMode(MPP_SG_PTR);
+}
 
 void MPP_SetTargetSpeed(MPP_Instance_t *instance, float new_speed)
 {
@@ -202,6 +220,20 @@ float MPP_GetTargetSpeed(MPP_Instance_t *instance)
 	int32_t speed_hz;
 	speed_hz = STEP_GEN_GetTargetSpeed(MPP_SG_PTR);
 	return MPP_HzToRadPerSec(instance, speed_hz);
+}
+
+void MPP_SetTargetPosition(MPP_Instance_t *instance, double new_position)
+{
+	int64_t position_step;
+	position_step = MPP_RadToSteps(instance, new_position);
+	STEP_GEN_SetTargetPosition(MPP_SG_PTR, position_step);
+}
+
+double MPP_GetTargetPosition(MPP_Instance_t *instance)
+{
+	int64_t position_step;
+	position_step = STEP_GEN_GetTargetPosition(MPP_SG_PTR);
+	return MPP_RadToSteps(instance, position_step);
 }
 
 void MPP_SetCurrentSpeed(MPP_Instance_t *instance, float new_speed)
@@ -278,4 +310,3 @@ uint32_t MPP_GetSpeedUpdatePeriod(MPP_Instance_t *instance)
 {
 	return STEP_GEN_GetCyclePeriod(MPP_SG_PTR);
 }
-

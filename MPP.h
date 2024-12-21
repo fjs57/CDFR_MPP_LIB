@@ -18,6 +18,9 @@
 #endif
 
 #define MPP_2PI 6.283185307179586
+#define MPP_PI 3.14159265359
+
+typedef STEP_GEN_ControlMode_t MPP_ControlMode_t;
 
 typedef struct
 {
@@ -51,6 +54,12 @@ typedef struct
 
 	float acceleration; // in rad/s²
 	uint32_t speed_update_period; // in ms
+
+	double approach_distance; // in rad
+	float approach_speed; // in rad/s
+	float run_speed; // in rad/s
+
+	MPP_ControlMode_t default_control_mode;
 }
 MPP_Config_t;
 
@@ -83,6 +92,8 @@ void MPP_kHz_Process(MPP_Instance_t *instance);
 
 bool MPP_OnPwmPulseFinishedProcess(MPP_Instance_t *instance, TIM_HandleTypeDef *htim);
 
+void MPP_HardStop(MPP_Instance_t *instance);
+
 void MPP_Enable(MPP_Instance_t *instance);
 void MPP_Disable(MPP_Instance_t *instance);
 bool MPP_GetEnableState(MPP_Instance_t *instance);
@@ -91,8 +102,14 @@ void MPP_EnableWatchdogActivate(MPP_Instance_t *instance);
 void MPP_EnableWatchdogDeactivate(MPP_Instance_t *instance);
 bool MPP_GetEnableWatchdogActivationState(MPP_Instance_t *instance);
 
+bool MPP_SetControlMode(MPP_Instance_t *instance, MPP_ControlMode_t new_mode);
+MPP_ControlMode_t MPP_GetControlMode(MPP_Instance_t *instance);
+
 void MPP_SetTargetSpeed(MPP_Instance_t *instance, float new_speed);
 float MPP_GetTargetSpeed(MPP_Instance_t *instance);
+
+void MPP_SetTargetPosition(MPP_Instance_t *instance, double new_position);
+double MPP_GetTargetPosition(MPP_Instance_t *instance);
 
 void MPP_SetCurrentSpeed(MPP_Instance_t *instance, float new_speed);
 float MPP_GetCurrentSpeed(MPP_Instance_t *instance);
