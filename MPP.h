@@ -138,4 +138,6 @@ double MPP_GetApproachDistance(MPP_Instance_t *instance);
 void MPP_SetRunSpeed(MPP_Instance_t *instance, float new_speed);
 float MPP_GetRunSpeed(MPP_Instance_t *instance);
 
+bool MPP_IsMovementFinished(MPP_Instance_t *instance);
+
 #endif /* L_MPP_MPP_H_ */

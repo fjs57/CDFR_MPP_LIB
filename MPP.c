@@ -352,3 +352,8 @@ float MPP_GetRunSpeed(MPP_Instance_t *instance)
 	speed = STEP_GEN_GetRunSpeed(MPP_SG_PTR);
 	return MPP_HzToRadPerSec(instance, speed);
 }
+
+bool MPP_IsMovementFinished(MPP_Instance_t *instance)
+{
+	return MPP_SG_INST.data.controller_state == STEP_GEN_STATE_AT_TARGET;
+}
