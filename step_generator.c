@@ -571,6 +571,8 @@ void STEP_GEN_HardStop					(STEP_GEN_Instance_t *instance)
 	STEP_GEN_DATA.target_speed = 0;
 	STEP_GEN_DATA.current_speed = 0;
 	STEP_GEN_DATA.target_position = STEP_GEN_DATA.current_position;
+//	STEP_GEN_DATA.control_mode = STEP_GEN_CTRL_NONE;
+	STEP_GEN_TIM_SetFrequency(instance);
 
 	if ( STEP_GEN_DATA.control_mode == STEP_GEN_CTRL_POSITION )
 	{
