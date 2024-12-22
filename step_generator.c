@@ -480,7 +480,7 @@ bool STEP_GEN_OnStepProcess(STEP_GEN_Instance_t *instance, TIM_HandleTypeDef *ht
 	return 1;
 }
 
-void STEP_GEN_MovementFinished_SetCallback(STEP_GEN_Instance_t *instance, STEP_GEN_Callback callback)
+void STEP_GEN_MovementFinished_SetCallback(STEP_GEN_Instance_t *instance, STEP_GEN_Callback_t callback)
 {
 	STEP_GEN_DATA.movement_finished_callback = callback;
 }

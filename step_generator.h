@@ -11,7 +11,7 @@
 #include "main.h"
 #include <stdbool.h>
 
-typedef void (*STEP_GEN_Callback)();
+typedef void (*STEP_GEN_Callback_t)(void);
 
 typedef enum
 {
@@ -73,7 +73,7 @@ typedef struct
 	int8_t speed_dir;
 	int64_t stop_distance;
 	int64_t stop_position;
-	STEP_GEN_Callback movement_finished_callback;
+	STEP_GEN_Callback_t movement_finished_callback;
 }
 STEP_GEN_Data_t;
 
@@ -93,7 +93,7 @@ bool STEP_GEN_OnStepProcess(STEP_GEN_Instance_t *instance, TIM_HandleTypeDef *ht
 bool STEP_GEN_SetControlMode(STEP_GEN_Instance_t *instance, STEP_GEN_ControlMode_t new_mode);
 STEP_GEN_ControlMode_t STEP_GEN_GetControlMode(STEP_GEN_Instance_t *instance);
 
-void STEP_GEN_MovementFinished_SetCallback(STEP_GEN_Instance_t *instance, STEP_GEN_Callback callback);
+void STEP_GEN_MovementFinished_SetCallback(STEP_GEN_Instance_t *instance, STEP_GEN_Callback_t callback);
 
 void STEP_GEN_SetTargetSpeed			(STEP_GEN_Instance_t *instance, int32_t 	new_target_speed		);
 void STEP_GEN_SetCurrentPosition		(STEP_GEN_Instance_t *instance, int64_t 	new_current_position	);

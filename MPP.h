@@ -23,7 +23,7 @@
 typedef STEP_GEN_ControlMode_t MPP_ControlMode_t;
 
 // type used in callbacks
-typedef void (*MPP_Callback)(void);
+typedef void (*MPP_Callback_t)(void);
 
 typedef struct
 {
@@ -70,7 +70,7 @@ typedef struct
 {
 	uint32_t last_enable_watchdog_ping;
 	bool watchdog_status;
-	MPP_Callback watchdog_triggered_callback;
+	MPP_Callback_t watchdog_triggered_callback;
 	bool enable_state;
 
 	STEP_GEN_Descriptor_t sg_desc;
@@ -106,7 +106,7 @@ bool MPP_GetEnableState(MPP_Instance_t *instance);
 void MPP_EnableWatchdogActivate(MPP_Instance_t *instance);
 void MPP_EnableWatchdogDeactivate(MPP_Instance_t *instance);
 bool MPP_GetEnableWatchdogActivationState(MPP_Instance_t *instance);
-void MPP_WatchdogTriggered_SetCallback(MPP_Instance_t *instance, MPP_Callback callback);
+void MPP_WatchdogTriggered_SetCallback(MPP_Instance_t *instance, MPP_Callback_t callback);
 
 bool MPP_SetControlMode(MPP_Instance_t *instance, MPP_ControlMode_t new_mode);
 MPP_ControlMode_t MPP_GetControlMode(MPP_Instance_t *instance);
@@ -145,6 +145,6 @@ void MPP_SetRunSpeed(MPP_Instance_t *instance, float new_speed);
 float MPP_GetRunSpeed(MPP_Instance_t *instance);
 
 bool MPP_IsMovementFinished(MPP_Instance_t *instance);
-void MPP_MovementFinished_SetCallback(MPP_Instance_t *instance, MPP_Callback callback);
+void MPP_MovementFinished_SetCallback(MPP_Instance_t *instance, MPP_Callback_t callback);
 
 #endif /* L_MPP_MPP_H_ */
