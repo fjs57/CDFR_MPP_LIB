@@ -22,6 +22,9 @@
 
 typedef STEP_GEN_ControlMode_t MPP_ControlMode_t;
 
+// type used in callbacks
+typedef void (*MPP_Callback)(void);
+
 typedef struct
 {
 	TIM_HandleTypeDef *htim;
@@ -139,5 +142,6 @@ void MPP_SetRunSpeed(MPP_Instance_t *instance, float new_speed);
 float MPP_GetRunSpeed(MPP_Instance_t *instance);
 
 bool MPP_IsMovementFinished(MPP_Instance_t *instance);
+void MPP_MovementFinished_SetCallback(MPP_Instance_t *instance, MPP_Callback callback);
 
 #endif /* L_MPP_MPP_H_ */

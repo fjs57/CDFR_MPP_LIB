@@ -178,6 +178,11 @@ static void STEP_GEN_AtTargetAction(STEP_GEN_Instance_t *instance)
 	STEP_GEN_DATA.current_speed = 0;
 	STEP_GEN_DATA.target_speed = 0;
 	STEP_GEN_TIM_SetFrequency(instance);
+
+	if ( STEP_GEN_DATA.movement_finished_callback != 0 )
+	{
+		(STEP_GEN_DATA.movement_finished_callback)();
+	}
 }
 
 /**
@@ -440,6 +445,7 @@ void STEP_GEN_Init(STEP_GEN_Instance_t *instance)
 	STEP_GEN_DATA.target_speed = 0;
 	STEP_GEN_DATA.target_position = 0;
 	STEP_GEN_DATA.control_mode = STEP_GEN_CONFIG.default_control_mode;
+	STEP_GEN_DATA.movement_finished_callback = 0;
 	STEP_GEN_ComputeAccelerationStep(instance);
 }
 
@@ -472,6 +478,11 @@ bool STEP_GEN_OnStepProcess(STEP_GEN_Instance_t *instance, TIM_HandleTypeDef *ht
 	STEP_GEN_GPIO_SetDir(instance);
 	STEP_GEN_AtTargetAction(instance);
 	return 1;
+}
+
+void STEP_GEN_MovementFinished_SetCallback(STEP_GEN_Instance_t *instance, STEP_GEN_Callback callback)
+{
+	STEP_GEN_DATA.movement_finished_callback = callback;
 }
 
 bool STEP_GEN_SetControlMode(STEP_GEN_Instance_t *instance, STEP_GEN_ControlMode_t new_mode)

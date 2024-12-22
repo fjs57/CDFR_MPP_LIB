@@ -357,3 +357,8 @@ bool MPP_IsMovementFinished(MPP_Instance_t *instance)
 {
 	return MPP_SG_INST.data.controller_state == STEP_GEN_STATE_AT_TARGET;
 }
+
+void MPP_MovementFinished_SetCallback(MPP_Instance_t *instance, MPP_Callback callback)
+{
+	STEP_GEN_MovementFinished_SetCallback(MPP_SG_PTR, callback);
+}
