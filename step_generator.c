@@ -554,6 +554,45 @@ void STEP_GEN_SetCyclePeriod			(STEP_GEN_Instance_t *instance, uint32_t new_cycl
 }
 
 /**
+ * Sets the approach distance for position control
+ */
+void STEP_GEN_SetApproachDistance		(STEP_GEN_Instance_t *instance, int64_t     new_distance			)
+{
+	STEP_GEN_CONFIG.approach_distance = (uint32_t)new_distance;
+	if ( STEP_GEN_DATA.controller_state != STEP_GEN_STATE_AT_TARGET )
+	{
+		// resets the state machine to apply new speed
+		STEP_GEN_DATA.controller_state = STEP_GEN_STATE_NEW_TARGET;
+	}
+}
+
+/**
+ * Sets the approach speed fro position control
+ */
+void STEP_GEN_SetApproachSpeed			(STEP_GEN_Instance_t *instance, int32_t 	new_speed				)
+{
+	STEP_GEN_CONFIG.approach_speed = (uint32_t)new_speed;
+	if ( STEP_GEN_DATA.controller_state != STEP_GEN_STATE_AT_TARGET )
+	{
+		// resets the state machine to apply new speed
+		STEP_GEN_DATA.controller_state = STEP_GEN_STATE_NEW_TARGET;
+	}
+}
+
+/**
+ * Sets the run speed in position control
+ */
+void STEP_GEN_SetRunSpeed				(STEP_GEN_Instance_t *instance, int32_t		new_speed				)
+{
+	STEP_GEN_CONFIG.run_speed = (uint32_t)new_speed;
+	if ( STEP_GEN_DATA.controller_state != STEP_GEN_STATE_AT_TARGET )
+	{
+		// resets the state machine to apply new speed
+		STEP_GEN_DATA.controller_state = STEP_GEN_STATE_NEW_TARGET;
+	}
+}
+
+/**
  * Used to force a speed. Refuses if not SPEED control
  */
 void STEP_GEN_ForceCurrentSpeed			(STEP_GEN_Instance_t *instance, int32_t new_current_speed		)
@@ -586,3 +625,6 @@ int32_t 				STEP_GEN_GetCurrentSpeed	(STEP_GEN_Instance_t *instance){ return STE
 int64_t 				STEP_GEN_GetCurrentPosition	(STEP_GEN_Instance_t *instance){ return STEP_GEN_DATA.current_position; }
 uint32_t				STEP_GEN_GetAcceleration	(STEP_GEN_Instance_t *instance){ return STEP_GEN_CONFIG.frequency_acceleration; }
 uint32_t 				STEP_GEN_GetCyclePeriod		(STEP_GEN_Instance_t *instance){ return STEP_GEN_CONFIG.cycle_period; }
+int64_t 				STEP_GEN_GetApproachDistance(STEP_GEN_Instance_t *instance){ return STEP_GEN_CONFIG.approach_distance; }
+int32_t 				STEP_GEN_GetApproachSpeed	(STEP_GEN_Instance_t *instance){ return STEP_GEN_CONFIG.approach_speed; }
+int32_t 				STEP_GEN_GetRunSpeed		(STEP_GEN_Instance_t *instance){ return STEP_GEN_CONFIG.run_speed; }

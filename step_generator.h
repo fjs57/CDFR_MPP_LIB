@@ -95,6 +95,9 @@ void STEP_GEN_SetCurrentPosition		(STEP_GEN_Instance_t *instance, int64_t 	new_c
 void STEP_GEN_SetTargetPosition			(STEP_GEN_Instance_t *instance, int64_t 	new_target_position		);
 void STEP_GEN_SetAcceleration			(STEP_GEN_Instance_t *instance, uint32_t 	new_acceleration		);
 void STEP_GEN_SetCyclePeriod			(STEP_GEN_Instance_t *instance, uint32_t 	new_cycle_period		);
+void STEP_GEN_SetApproachDistance		(STEP_GEN_Instance_t *instance, int64_t     new_distance			);
+void STEP_GEN_SetApproachSpeed			(STEP_GEN_Instance_t *instance, int32_t 	new_speed				);
+void STEP_GEN_SetRunSpeed				(STEP_GEN_Instance_t *instance, int32_t		new_speed				);
 
 void STEP_GEN_ForceCurrentSpeed			(STEP_GEN_Instance_t *instance, int32_t 	new_current_speed		);
 void STEP_GEN_HardStop					(STEP_GEN_Instance_t *instance);
@@ -105,5 +108,8 @@ int64_t 	STEP_GEN_GetCurrentPosition	(STEP_GEN_Instance_t *instance);
 int64_t 	STEP_GEN_GetTargetPosition	(STEP_GEN_Instance_t *instance);
 uint32_t	STEP_GEN_GetAcceleration	(STEP_GEN_Instance_t *instance);
 uint32_t 	STEP_GEN_GetCyclePeriod		(STEP_GEN_Instance_t *instance);
+int64_t 	STEP_GEN_GetApproachDistance(STEP_GEN_Instance_t *instance);
+int32_t 	STEP_GEN_GetApproachSpeed	(STEP_GEN_Instance_t *instance);
+int32_t 	STEP_GEN_GetRunSpeed		(STEP_GEN_Instance_t *instance);
 
 #endif /* STEP_GEN_H_ */
