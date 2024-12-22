@@ -310,3 +310,45 @@ uint32_t MPP_GetSpeedUpdatePeriod(MPP_Instance_t *instance)
 {
 	return STEP_GEN_GetCyclePeriod(MPP_SG_PTR);
 }
+
+void MPP_SetApproachSpeed(MPP_Instance_t *instance, float new_speed)
+{
+	int32_t speed;
+	speed = MPP_RadPerSecToHz(instance, new_speed);
+	STEP_GEN_SetApproachSpeed(MPP_SG_PTR, speed);
+}
+
+float MPP_GetApproachSpeed(MPP_Instance_t *instance)
+{
+	int32_t speed;
+	speed = STEP_GEN_GetApproachSpeed(MPP_SG_PTR);
+	return MPP_HzToRadPerSec(instance, speed);
+}
+
+void MPP_SetApproachDistance(MPP_Instance_t *instance, double new_distance)
+{
+	int64_t distance;
+	distance = MPP_RadToSteps(instance, new_distance);
+	STEP_GEN_SetApproachDistance(MPP_SG_PTR, distance);
+}
+
+double MPP_GetApproachDistance(MPP_Instance_t *instance)
+{
+	int64_t distance;
+	distance = STEP_GEN_GetApproachDistance(MPP_SG_PTR);
+	return MPP_StepsToRad(instance, distance);
+}
+
+void MPP_SetRunSpeed(MPP_Instance_t *instance, float new_speed)
+{
+	int32_t speed;
+	speed = MPP_RadPerSecToHz(instance, new_speed);
+	STEP_GEN_SetRunSpeed(MPP_SG_PTR, speed);
+}
+
+float MPP_GetRunSpeed(MPP_Instance_t *instance)
+{
+	int32_t speed;
+	speed = STEP_GEN_GetRunSpeed(MPP_SG_PTR);
+	return MPP_HzToRadPerSec(instance, speed);
+}

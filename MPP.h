@@ -129,4 +129,13 @@ float MPP_GetAcceleration(MPP_Instance_t *instance);
 void MPP_SetSpeedUpdatePeriod(MPP_Instance_t *instance, uint32_t new_period);
 uint32_t MPP_GetSpeedUpdatePeriod(MPP_Instance_t *instance);
 
+void MPP_SetApproachSpeed(MPP_Instance_t *instance, float new_speed);
+float MPP_GetApproachSpeed(MPP_Instance_t *instance);
+
+void MPP_SetApproachDistance(MPP_Instance_t *instance, double new_distance);
+double MPP_GetApproachDistance(MPP_Instance_t *instance);
+
+void MPP_SetRunSpeed(MPP_Instance_t *instance, float new_speed);
+float MPP_GetRunSpeed(MPP_Instance_t *instance);
+
 #endif /* L_MPP_MPP_H_ */
