@@ -69,6 +69,8 @@ MPP_Config_t;
 typedef struct
 {
 	uint32_t last_enable_watchdog_ping;
+	bool watchdog_status;
+	MPP_Callback watchdog_triggered_callback;
 	bool enable_state;
 
 	STEP_GEN_Descriptor_t sg_desc;
@@ -104,6 +106,7 @@ bool MPP_GetEnableState(MPP_Instance_t *instance);
 void MPP_EnableWatchdogActivate(MPP_Instance_t *instance);
 void MPP_EnableWatchdogDeactivate(MPP_Instance_t *instance);
 bool MPP_GetEnableWatchdogActivationState(MPP_Instance_t *instance);
+void MPP_WatchdogTriggered_SetCallback(MPP_Instance_t *instance, MPP_Callback callback);
 
 bool MPP_SetControlMode(MPP_Instance_t *instance, MPP_ControlMode_t new_mode);
 MPP_ControlMode_t MPP_GetControlMode(MPP_Instance_t *instance);

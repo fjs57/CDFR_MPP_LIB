@@ -38,16 +38,23 @@ static void MPP_WriteEnablePin(MPP_Instance_t *instance);
 static bool MPP_ComputeEnableState(MPP_Instance_t *instance)
 {
 	uint32_t time = HAL_GetTick();
+	bool wg_condition;
 
 	if ( ! MPP_DATA.enable_state )
+	{
+		MPP_DATA.watchdog_status = 0;
 		return 0; // if not enabled, return 0
+	}
 
 	if ( MPP_CFG.enable_watchdog_activation_state )
 	{
 		// if enabled, and watch dog is active, return watch dog state
-		return (time <= (MPP_DATA.last_enable_watchdog_ping + MPP_CFG.enable_watchdog_timeout) );
+		wg_condition = (time <= (MPP_DATA.last_enable_watchdog_ping + MPP_CFG.enable_watchdog_timeout) );
+		MPP_DATA.watchdog_status = !wg_condition;
+		return wg_condition;
 	}
 	// else, it is enabled
+	MPP_DATA.watchdog_status = 0;
 	return 1;
 }
 
@@ -96,7 +103,16 @@ static void MPP_UpdateStepGenAcc(MPP_Instance_t *instance)
 
 static void MPP_WatchdogProcess(MPP_Instance_t *instance)
 {
+	bool wg_status_before;
+	wg_status_before = MPP_DATA.watchdog_status;
 	MPP_DATA.enable_state = MPP_ComputeEnableState(instance);
+	if ( ( wg_status_before == 0 ) && ( MPP_DATA.watchdog_status == 1) )
+	{
+		if ( MPP_DATA.watchdog_triggered_callback != 0 )
+		{
+			(MPP_DATA.watchdog_triggered_callback)();
+		}
+	}
 }
 
 static void MPP_WriteEnablePin(MPP_Instance_t *instance)
@@ -107,6 +123,8 @@ static void MPP_WriteEnablePin(MPP_Instance_t *instance)
 
 void MPP_Init(MPP_Instance_t *instance)
 {
+	MPP_DATA.watchdog_triggered_callback = 0;
+
 	MPP_SG_DESC.dir_pin = MPP_DESC->dir_pin;
 	MPP_SG_DESC.dir_port = MPP_DESC->dir_port;
 
@@ -196,6 +214,11 @@ void MPP_EnableWatchdogDeactivate(MPP_Instance_t *instance)
 bool MPP_GetEnableWatchdogActivationState(MPP_Instance_t *instance)
 {
 	return MPP_CFG.enable_watchdog_activation_state;
+}
+
+void MPP_WatchdogTriggered_SetCallback(MPP_Instance_t *instance, MPP_Callback callback)
+{
+	MPP_DATA.watchdog_triggered_callback = callback;
 }
 
 bool MPP_SetControlMode(MPP_Instance_t *instance, MPP_ControlMode_t new_mode)
